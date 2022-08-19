@@ -160,4 +160,4 @@
     - price: 옵션 가격
     - stock: 재고
 
-### server setting : http://yoonbumtae.com/?p=3671
+### ref : http://yoonbumtae.com/?p=3671

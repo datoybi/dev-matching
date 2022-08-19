@@ -1,4 +1,4 @@
-import { fetchList } from "../utils/api.js";
+import { request } from "../utils/api.js";
 import ProductList from "./ProductList.js";
 
 export default function ProductListPage({ $target }) {
@@ -13,7 +13,7 @@ export default function ProductListPage({ $target }) {
   };
 
   const fetchProducts = async () => {
-    const products = await fetchList("../products.json");
+    const products = await request("products");
     this.setState(products);
   };
 

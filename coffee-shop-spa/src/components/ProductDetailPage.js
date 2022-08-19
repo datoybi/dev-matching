@@ -1,15 +1,42 @@
+import { request } from "../utils/api.js";
+import { ProductDetail } from "./ProductDetail.js";
+
 export default function ProductDetailPage({ $target, productId }) {
   this.state = {
     productId,
+    product: null,
   };
-
-  console.log(this.state);
 
   const $page = document.createElement("div");
   $page.className = "ProductDetailPage";
-  $page.innerHTML = "<h1>상품 정보</h1>";
+  this.$target = $target;
+
+  this.setState = (newState) => {
+    this.state = newState;
+    this.render();
+    // this.state 잘 들어갔음
+  };
+
+  this.fetchProductsDetail = async () => {
+    const product = await request(`products/${this.state.productId}`);
+    this.setState({ ...this.state, product });
+  };
 
   this.render = () => {
-    $target.appendChild($page);
+    if (!this.state.product) {
+      $target.innerHTML = "Loading...";
+    } else {
+      $target.innerHTML = "";
+      $target.appendChild($page);
+      this.productDetail = new ProductDetail({
+        $target: $page,
+        initialState: {
+          product: this.state.product,
+          selectedOptions: [],
+        },
+      });
+    }
   };
+
+  this.fetchProductsDetail();
 }

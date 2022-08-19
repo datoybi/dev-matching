@@ -9,12 +9,10 @@ export default function App({ $target }) {
     console.log(pathname);
     $target.innerHTML = "";
 
-    if (pathname === "/web/" || "/") {
+    if (pathname === "/") {
       new ProductListPage({ $target });
-      // history.pushState(null, "", "/web");
-    } else if (pathname.indexOf("/products?") === 0) {
+    } else if (pathname.indexOf("/products/") === 0) {
       const [, , productId] = pathname.split("/");
-      console.log(productId);
       new ProductDetailPage({ $target, productId }).render();
     } else if (pathname === "/cart") {
       new CartPage({ $target }).render();
