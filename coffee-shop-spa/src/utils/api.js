@@ -1,4 +1,4 @@
-const API_END_POINT = "http://localhost:3000/";
+const API_END_POINT = "http://localhost:3000";
 
 export const request = async (url) => {
   try {

@@ -1,6 +1,7 @@
 import SelectedOptions from "./SelectedOptions.js";
 
 export function ProductDetail({ $target, initialState }) {
+  let isInitialized = false;
   this.state = initialState;
   const $ProductDetail = document.createElement("div");
   $ProductDetail.className = "ProductDetail";
@@ -23,7 +24,9 @@ export function ProductDetail({ $target, initialState }) {
   this.render = () => {
     const { product } = this.state;
 
-    $ProductDetail.innerHTML = `
+    // 아래 코드는 1회만 실행됩니다.
+    if (!isInitialized) {
+      $ProductDetail.innerHTML = `
 			<img src="${product.imageUrl}"/>
 			<div class="ProductDetail__info">
 				<h2>${product.name}</h2>
@@ -49,6 +52,7 @@ export function ProductDetail({ $target, initialState }) {
 				</div>
 			</div>
     `;
+    }
 
     selectedOptions = new SelectedOptions({
       $target: $ProductDetail.querySelector(".ProductDetail__selectedOptions"),
@@ -57,6 +61,7 @@ export function ProductDetail({ $target, initialState }) {
         selectedOptions: this.state.selectedOptions,
       },
     });
+    isInitialized = true;
   };
 
   this.render();

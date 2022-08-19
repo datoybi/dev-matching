@@ -18,7 +18,7 @@
 
 ### 상품 목록 페이지
 
-<img src="./images/Untitled.png">
+<img src="./public/images/Untitled.png">
 
 - url: /web/
 - 위의 디자인에 따라 상품 목록을 렌더링 합니다.
@@ -26,7 +26,7 @@
 
 ### 상품 상세 페이지
 
-<img src="./images/Untitled 1.png">
+<img src="./public/images/Untitled 1.png">
 
 - url: /web/products/:productId
 - (필수) productId에 해당하는 상품을 불러오고, 상품 정보를 렌더링 합니다.
@@ -61,7 +61,7 @@
 
 ### 장바구니
 
-<img src="./images/Untitled 2.png">
+<img src="./public/images/Untitled 2.png">
 
 - url: /web/cart
 - (필수) local storage에 담아둔 장바구니 관련 데이터를 이용해 상품 및 상품 옵션 데이터를 불러오고, 화면 가이드에 맞게 장바구니에 담긴 상품들을 렌더링 합니다.
@@ -161,3 +161,139 @@
     - stock: 재고
 
 ### ref : http://yoonbumtae.com/?p=3671
+
+total html
+
+```
+<html>
+  <head>
+    <title>커피캣 스토어</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <main class="App">
+      <div class="ProductListPage">
+        <h1>상품목록</h1>
+        <ul>
+          <li class="Product">
+            <img
+              src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+            />
+            <div class="Product__info">
+              <div>커피잔</div>
+              <div>10,000원~</div>
+            </div>
+          </li>
+          <li class="Product">
+            <img
+              src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+            />
+            <div class="Product__info">
+              <div>커피잔</div>
+              <div>10,000원~</div>
+            </div>
+          </li>
+          <li class="Product">
+            <img
+              src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+            />
+            <div class="Product__info">
+              <div>커피잔</div>
+              <div>10,000원~</div>
+            </div>
+          </li>
+          <li class="Product">
+            <img
+              src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+            />
+            <div class="Product__info">
+              <div>커피잔</div>
+              <div>10,000원~</div>
+            </div>
+          </li>
+          <li class="Product">
+            <img
+              src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+            />
+            <div class="Product__info">
+              <div>커피잔</div>
+              <div>10,000원~</div>
+            </div>
+          </li>
+          <li class="Product">
+            <img
+              src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+            />
+            <div class="Product__info">
+              <div>커피잔</div>
+              <div>10,000원~</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="ProductDetailPage">
+        <h1>커피잔 상품 정보</h1>
+        <div class="ProductDetail">
+          <img
+            src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+          />
+          <div class="ProductDetail__info">
+            <h2>커피잔</h2>
+            <div class="ProductDetail__price">10,000원~</div>
+            <select>
+              <option>선택하세요.</option>
+              <option>100개 번들</option>
+              <option>1000개 번들(+5,000)</option>
+            </select>
+            <div class="ProductDetail__selectedOptions">
+              <h3>선택된 상품</h3>
+              <ul>
+                <li>
+                  커피잔 100개 번들 10,000원
+                  <div><input type="number" value="10" />개</div>
+                </li>
+                <li>
+                  커피잔 1000개 번들 15,000원
+                  <div><input type="number" value="5" />개</div>
+                </li>
+              </ul>
+              <div class="ProductDetail__totalPrice">175,000원</div>
+              <button class="OrderButton">주문하기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="CartPage">
+        <h1>장바구니</h1>
+        <div class="Cart">
+          <ul>
+            <li class="Cart__item">
+              <img
+                src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+              />
+              <div class="Cart__itemDesription">
+                <div>커피잔 100개 번들 10,000원 10개</div>
+                <div>100,000원</div>
+              </div>
+            </li>
+            <li class="Cart__item">
+              <img
+                src="https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/assignment_image/cafe_coffee_cup.png"
+              />
+              <div class="Cart__itemDesription">
+                <div>커피잔 1000개 번들 15,000원 5개</div>
+                <div>75,000원</div>
+              </div>
+            </li>
+          </ul>
+          <div class="Cart__totalPrice">총 상품가격 175,000원</div>
+          <button class="OrderButton">주문하기</button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+
+```

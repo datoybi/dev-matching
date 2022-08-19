@@ -18,7 +18,7 @@ export default function ProductDetailPage({ $target, productId }) {
   };
 
   this.fetchProductsDetail = async () => {
-    const product = await request(`products/${this.state.productId}`);
+    const product = await request(`/products/${this.state.productId}`);
     this.setState({ ...this.state, product });
   };
 

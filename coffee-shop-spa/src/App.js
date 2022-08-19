@@ -6,8 +6,8 @@ import { init } from "./router.js";
 export default function App({ $target }) {
   this.route = () => {
     const { pathname } = location;
-    console.log(pathname);
     $target.innerHTML = "";
+    console.log(pathname);
 
     if (pathname === "/") {
       new ProductListPage({ $target });

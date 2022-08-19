@@ -13,7 +13,7 @@ export default function ProductListPage({ $target }) {
   };
 
   const fetchProducts = async () => {
-    const products = await request("products");
+    const products = await request("/products");
     this.setState(products);
   };
 
