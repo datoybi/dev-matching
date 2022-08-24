@@ -1,4 +1,4 @@
-export default function Breadcrumb({ $target, initialState }) {
+export default function Breadcrumb({ $target, initialState, onClick }) {
   this.state = initialState;
   this.$target = $target;
   const $breadcrumb = document.createElement("nav");
@@ -7,7 +7,7 @@ export default function Breadcrumb({ $target, initialState }) {
 
   this.render = () => {
     $breadcrumb.innerHTML = this.state
-      .map((path) => `<div">${path.name}</div>`)
+      .map((path) => `<div data-id="${path.id || "root"}">${path.name}</div>`)
       .join("");
   };
 
@@ -17,4 +17,9 @@ export default function Breadcrumb({ $target, initialState }) {
   };
 
   this.render();
+
+  $breadcrumb.addEventListener("click", (e) => {
+    const id = e.target.dataset.id;
+    onClick(id);
+  });
 }

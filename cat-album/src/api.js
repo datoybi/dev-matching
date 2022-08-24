@@ -5,7 +5,7 @@ export const request = async (url) => {
   try {
     const fullURL = `${API_END_POINT}${url}`;
     const response = await fetch(fullURL);
-    console.log(fullURL);
+    // console.log(fullURL);
 
     if (response.ok) {
       const json = await response.json();
