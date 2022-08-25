@@ -1,69 +1,135 @@
-import Contents from "./Contents.js";
+import Nodes from "./Nodes.js";
 import Breadcrumb from "./Breadcrumb.js";
 import { request } from "../api.js";
-import { setLoading } from "../utils.js";
+import Loading from "./Loading.js";
+import ImageViewer from "./ImageViewer.js";
 
-export default function App({ $target, initialState }) {
-  this.state = initialState;
+const cache = {};
 
-  this.fetchList = async (id) => {
-    const response = await request(`/${id || ""}`);
-    return response;
+export default function App({ $app }) {
+  this.state = {
+    path: [],
+    nodes: [],
+    isLoading: false,
+    isRoot: true,
+    imageViewerPath: null,
   };
 
-  this.getNodes = async (id) => {
-    setLoading();
-    const totalAlbumKey = !id ? "root" : id;
-    const [totalAlbums] = [...this.state.totalAlbums];
-    const newNodes = totalAlbums[totalAlbumKey] || (await this.fetchList(id));
-    totalAlbums[totalAlbumKey] = newNodes;
-    return [newNodes, [totalAlbums]];
-  };
+  const loading = new Loading({ $app });
 
-  this.breadcrumb = new Breadcrumb({
-    $target,
+  const breadcrumb = new Breadcrumb({
+    $app,
     initialState: this.state.path,
     onClick: async (id) => {
-      const [newNodes, totalAlbums] = await this.getNodes(id);
-      let idx = 0;
-      if (id !== "root") {
-        idx = this.state.path.findIndex((el) => el.id === id);
+      if (!id) {
+        // root
+        this.setState({
+          ...this.state,
+          path: [],
+          nodes: cache["root"],
+          isRoot: true,
+          imageViewerPath: "",
+        });
+        return;
+      } else {
+        const idx = this.state.path.findIndex((el) => el.id === id);
+        const nextPath = [...this.state.path].slice(0, idx + 1);
+        this.setState({
+          ...this.state,
+          path: [...nextPath],
+          nodes: cache[id],
+          imageViewerPath: "",
+        });
       }
-      const newPath = [...this.state.path].slice(0, idx + 1);
-      this.setState({
-        totalAlbums: [...totalAlbums],
-        path: [...newPath],
-        nextAlbums: newNodes,
-      });
     },
   });
-  this.contents = new Contents({
-    $target,
+  const nodes = new Nodes({
+    $app,
     initialState: this.state,
-    onClick: async (id, name) => {
-      const [newNodes, totalAlbums] = await this.getNodes(id);
-      this.setState({
-        totalAlbums: [...totalAlbums],
-        path: [...this.state.path, { id: id, name: name }],
-        nextAlbums: newNodes,
-      });
+    onClick: async (node) => {
+      try {
+        const nodeId = !node.id ? "root" : node.id;
+        if (node.type === "DIRECTORY") {
+          loading.setState(true);
+          let nextNodes = cache[node.id];
+          if (!nextNodes) {
+            nextNodes = await request(nodeId);
+            cache[nodeId] = nextNodes;
+          }
+          const isRoot = nextNodes.some((el) => !el.parent);
+          loading.setState(false);
+          this.setState({
+            ...this.state,
+            path: [...this.state.path, { id: node.id, name: node.name }],
+            nodes: nextNodes,
+            isRoot,
+            imageViewerPath: "",
+          });
+        } else {
+          this.setState({
+            ...this.state,
+            imageViewerPath: node.filePath,
+            isRoot: false,
+          });
+        }
+      } catch (e) {
+        console.log(e.message);
+      }
     },
 
-    prevOnClick: async (id) => {
-      const [newNodes, totalAlbums] = await this.getNodes(id);
-      const newPath = [...this.state.path];
-      newPath.pop();
-      this.setState({
-        totalAlbums: [...totalAlbums],
-        path: [...newPath],
-        nextAlbums: newNodes,
-      });
+    prevOnClick: async () => {
+      try {
+        const newPath = [...this.state.path];
+        newPath.pop();
+        const nextNodeId =
+          newPath.length === 0 ? "root" : newPath[newPath.length - 1].id;
+        const nextNodes = cache[nextNodeId];
+        const isRoot = nextNodes.some((el) => !el.parent);
+        this.setState({
+          ...this.state,
+          path: [...newPath],
+          nodes: nextNodes,
+          isRoot,
+          imageViewerPath: "",
+        });
+      } catch (e) {
+        console.log(e.message);
+      }
     },
   });
+  const imageViewer = new ImageViewer({
+    $app,
+    initialState: this.state.imageViewerPath,
+  });
+
+  this.init = async () => {
+    this.setState({ ...this.state, isLoading: true });
+    try {
+      const rootNodes = await request();
+      this.setState({
+        ...this.state,
+        isLoading: false,
+        isRoot: true,
+        nodes: rootNodes,
+      });
+      cache.root = rootNodes;
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      this.setState({
+        ...this.state,
+        isLoading: false,
+      });
+    }
+  };
 
   this.setState = (newState) => {
     this.state = newState;
-    this.breadcrumb.setState(this.state.path);
-    this.contents.setState(this.state);
+    breadcrumb.setState(this.state.path);
+    nodes.setState(this.state);
+    loading.setState(this.state.isLoading);
+    imageViewer.setState(this.state.imageViewerPath);
   };
+
+  this.init();
 }

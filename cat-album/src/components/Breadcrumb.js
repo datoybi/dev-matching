@@ -1,14 +1,13 @@
-export default function Breadcrumb({ $target, initialState, onClick }) {
+export default function Breadcrumb({ $app, initialState, onClick }) {
   this.state = initialState;
-  this.$target = $target;
-  const $breadcrumb = document.createElement("nav");
-  $breadcrumb.className = "Breadcrumb";
-  this.$target.appendChild($breadcrumb);
+  this.$target = document.createElement("nav");
+  this.$target.className = "Breadcrumb";
+  $app.appendChild(this.$target);
 
   this.render = () => {
-    $breadcrumb.innerHTML = this.state
-      .map((path) => `<div data-id="${path.id || "root"}">${path.name}</div>`)
-      .join("");
+    this.$target.innerHTML = `<div>root</div>${this.state
+      .map((path) => `<div data-id="${path.id}">${path.name}</div>`)
+      .join("")}`;
   };
 
   this.setState = (newState) => {
@@ -18,8 +17,10 @@ export default function Breadcrumb({ $target, initialState, onClick }) {
 
   this.render();
 
-  $breadcrumb.addEventListener("click", (e) => {
-    const id = e.target.dataset.id;
-    onClick(id);
+  this.$target.addEventListener("click", (e) => {
+    if (e.target.tagName === "DIV") {
+      const { id } = e.target.dataset;
+      onClick(id);
+    }
   });
 }
