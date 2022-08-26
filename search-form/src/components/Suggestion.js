@@ -1,56 +1,73 @@
-export default function Suggestion({$app, initialState}){
-	this.state = initialState;
-	this.$target = document.createElement('div');
-	this.$target.className = 'Suggestion';
+export default function Suggestion({
+  $app,
+  initialState,
+  onSelectedChange,
+  onClick,
+}) {
+  this.state = initialState;
+  this.$target = document.createElement("div");
+  this.$target.className = "Suggestion";
+  this.onSelectedChange = onSelectedChange;
+  this.onClick = onClick;
 
-	this.render = () => {
-			this.$target.innerHTML ='';
-			const {keyword, suggestion} = this.state;
-			if(suggestion.length > 0){
-					$app.appendChild(this.$target)
-					this.$target.innerHTML = `
+  this.render = () => {
+    const { keyword, suggestion, selectedIndex } = this.state;
+    if (suggestion.length === 0) {
+      this.$target.style.display = "none";
+      // display 조작이 잘한건지 모르겠음
+    } else {
+      this.$target.style.display = "block";
+      $app.appendChild(this.$target);
+      this.$target.innerHTML = `
 					<ul>
-							${suggestion.map((suggestion, index) => `<li${index === 0 ? ` class="Suggestion__item--selected">`:">"} ${suggestion.toLowerCase().replace(keyword.toLowerCase(), 
-									`<span class="Suggestion__item--matched">${keyword}</span>`)}</li>`).join('')}
-					</ul>`
-			}
-	}
-	
-	this.setState = (newState) => {
-			this.state = newState;
-			this.render();
-	}
+							${suggestion
+                .map(
+                  (suggestion, index) =>
+                    `<li${
+                      index === selectedIndex
+                        ? ` class="Suggestion__item--selected">`
+                        : ">"
+                    }${suggestion.replace(
+                      /keyword/i,
+                      `<span class="Suggestion__item--matched">${keyword}</span>`
+                    )}</li>`
+                )
+                .join("")}
+					</ul>`;
+    }
+  };
 
-	this.$target.addEventListener('submit', e => {
-		e.preventDefault();
-			console.log('e');
-	})
+  this.setState = (newState) => {
+    this.state = newState;
+    this.render();
+  };
 
-	window.addEventListener('keyup', e => {
-			e.preventDefault();
-			const $li = this.$target.querySelectorAll('li');
-			const currentNode = this.$target.querySelector('.Suggestion__item--selected');
+  this.$target.addEventListener("click", (e) => {
+    console.log(e.target.innerHTML);
+    if (e.target.innerHTML) {
+      this.onClick(e.target.innerHTML);
+    }
+  });
 
-// 근데 내가봤을때 이것도 이렇게 이벤트로 조작하는거 아니고... 랜더링 해야되는건가?  sleected 이라면서?????
-			if(e.key === "ArrowDown"){
-					 $li.forEach((li, index) => {
-							if(li === currentNode){
-									li.classList.remove('Suggestion__item--selected')
-									let currentindex = (index + 1) > $li.length-1 ? 0 : (index + 1);
-									$li[currentindex].classList.add('Suggestion__item--selected')
-							}
-					})
-			} else if(e.key === "ArrowUp"){
-					$li.forEach((li, index) => {
-							if(li === currentNode){
-									li.classList.remove('Suggestion__item--selected')
-									let currentindex = (index - 1) < 0 ? $li.length-1 : (index - 1);
-									$li[currentindex].classList.add('Suggestion__item--selected')
-							}
-					})
-			} else if(e.key === "Enter"){
-									e.preventDefault();
-
-			}
-	})
-} 
+  window.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      const { selectedIndex, suggestion } = this.state;
+      let nextSelectedIndex = null;
+      // document.querySelector(".SearchInput__input").blur();
+      this.$target.focus();
+      if (selectedIndex === -1) {
+        nextSelectedIndex = 0;
+      } else {
+        nextSelectedIndex =
+          e.key === "ArrowDown"
+            ? selectedIndex + 1 > suggestion.length - 1
+              ? 0
+              : selectedIndex + 1
+            : selectedIndex - 1 >= 0
+            ? selectedIndex - 1
+            : suggestion.length - 1;
+      }
+      this.onSelectedChange(nextSelectedIndex);
+    }
+  });
+}
