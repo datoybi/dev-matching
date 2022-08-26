@@ -12,7 +12,7 @@ export function getItem(key) {
     return value ? JSON.parse(value) : [];
   } catch (e) {
     console.log(e.message);
-    return [];
+    return [];	
   }
 }
 

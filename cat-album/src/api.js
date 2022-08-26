@@ -5,15 +5,12 @@ export const request = async (nodeId) => {
   try {
     const fullURL = `${API_END_POINT}${nodeId || ""}`;
     const response = await fetch(fullURL);
-    // console.log(fullURL);
-
     if (response.ok) {
       const json = await response.json();
       return json;
     }
-
-    throw new Error("fetch error");
+    throw new Error("서버의 상태가 이상합니다.");
   } catch (e) {
-    console.log("request error " + e);
+    console.log("무언가 잘못되었습니다! " + e);
   }
 };

@@ -21,25 +21,28 @@ export default function App({ $app }) {
     $app,
     initialState: this.state.path,
     onClick: async (id) => {
-      if (!id) {
-        // root
-        this.setState({
-          ...this.state,
-          path: [],
-          nodes: cache["root"],
-          isRoot: true,
-          imageViewerPath: "",
-        });
-        return;
-      } else {
-        const idx = this.state.path.findIndex((el) => el.id === id);
-        const nextPath = [...this.state.path].slice(0, idx + 1);
-        this.setState({
-          ...this.state,
-          path: [...nextPath],
-          nodes: cache[id],
-          imageViewerPath: "",
-        });
+      try {
+        if (!id) {
+          this.setState({
+            ...this.state,
+            path: [],
+            nodes: cache["root"],
+            isRoot: true,
+            imageViewerPath: "",
+          });
+          return;
+        } else {
+          const idx = this.state.path.findIndex((el) => el.id === id);
+          const nextPath = [...this.state.path].slice(0, idx + 1);
+          this.setState({
+            ...this.state,
+            path: [...nextPath],
+            nodes: cache[id],
+            imageViewerPath: "",
+          });
+        }
+      } catch (e) {
+        console.log(`에러가 발생했습니다. ${e}`);
       }
     },
   });

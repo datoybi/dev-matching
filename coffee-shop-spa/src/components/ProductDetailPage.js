@@ -14,7 +14,6 @@ export default function ProductDetailPage({ $target, productId }) {
   this.setState = (newState) => {
     this.state = newState;
     this.render();
-    // this.state 잘 들어갔음
   };
 
   this.fetchProductsDetail = async () => {
