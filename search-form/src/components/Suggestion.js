@@ -3,12 +3,14 @@ export default function Suggestion({
   initialState,
   onSelectedChange,
   onClick,
+  onSubmit,
 }) {
   this.state = initialState;
   this.$target = document.createElement("div");
   this.$target.className = "Suggestion";
   this.onSelectedChange = onSelectedChange;
   this.onClick = onClick;
+  this.onSubmit = onSubmit;
 
   this.render = () => {
     const { keyword, suggestion, selectedIndex } = this.state;
@@ -18,22 +20,23 @@ export default function Suggestion({
     } else {
       this.$target.style.display = "block";
       $app.appendChild(this.$target);
+      console.log(suggestion);
       this.$target.innerHTML = `
-					<ul>
-							${suggestion
-                .map(
-                  (suggestion, index) =>
-                    `<li${
-                      index === selectedIndex
-                        ? ` class="Suggestion__item--selected">`
-                        : ">"
-                    }${suggestion.replace(
-                      /keyword/i,
-                      `<span class="Suggestion__item--matched">${keyword}</span>`
-                    )}</li>`
-                )
-                .join("")}
-					</ul>`;
+				<ul>
+						${suggestion
+              .map(
+                (element, index) =>
+                  `<li${
+                    index === selectedIndex
+                      ? ` class="Suggestion__item--selected">`
+                      : ">"
+                  }${element.replace(
+                    /keyword/i,
+                    `<span class="Suggestion__item--matched">${keyword}</span>`
+                  )}</li>`
+              )
+              .join("")}
+				</ul>`;
     }
   };
 
@@ -54,7 +57,7 @@ export default function Suggestion({
       const { selectedIndex, suggestion } = this.state;
       let nextSelectedIndex = null;
       // document.querySelector(".SearchInput__input").blur();
-      this.$target.focus();
+      // this.$target.focus();
       if (selectedIndex === -1) {
         nextSelectedIndex = 0;
       } else {
@@ -68,6 +71,8 @@ export default function Suggestion({
             : suggestion.length - 1;
       }
       this.onSelectedChange(nextSelectedIndex);
+    } else if (e.key === "Enter") {
+      this.onSubmit();
     }
   });
 }

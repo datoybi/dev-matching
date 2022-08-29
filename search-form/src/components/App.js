@@ -10,7 +10,7 @@ const cache = {};
 export default function App({ $app }) {
   this.state = {
     keyword: "",
-    suggestion: [],
+    suggestion: [], // fetchedLanguages
     selectedIndex: 0,
     selectedLanguage: [],
   };
@@ -130,6 +130,34 @@ export default function App({ $app }) {
         selectedLanguage: nextSelectedLanguage,
       });
     },
+    onSubmit: () => {
+      const selectedValue = this.state.suggestion[this.state.selectedIndex];
+      alert(selectedValue);
+      const selectedLanguages = [...this.state.selectedLanguage];
+      const nextIndex = selectedLanguages.indexOf(selectedValue); // 중복 체크
+      let nextSelectedLanguage = null;
+
+      if (nextIndex < 0) {
+        nextSelectedLanguage = [...this.state.selectedLanguage, selectedValue];
+        if (nextSelectedLanguage.length > 5) {
+          nextSelectedLanguage.shift();
+        }
+      } else {
+        selectedLanguages.splice(nextIndex, 1);
+        selectedLanguages.push(selectedValue);
+        nextSelectedLanguage = selectedLanguages;
+      }
+
+      setItem("searchState", {
+        ...getItem("searchState"),
+        selectedLanguage: nextSelectedLanguage,
+      });
+
+      this.setState({
+        ...this.state,
+        selectedLanguage: nextSelectedLanguage,
+      });
+    },
   });
 
   this.init = () => {
@@ -138,7 +166,6 @@ export default function App({ $app }) {
 
   this.setState = (newState) => {
     this.state = newState;
-    console.log(this.state);
     suggestion.setState(this.state);
     searchInput.setState(this.state);
     selectedLanguage.setState(this.state.selectedLanguage);

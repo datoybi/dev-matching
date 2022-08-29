@@ -19,11 +19,13 @@ export default function SearchInput({ $app, initialState, onInput, onSubmit }) {
     this.render();
   };
 
-  this.$target.addEventListener("input", (e) => {
+  this.$target.addEventListener("input", (e) => { // keyup
     this.onInput(e.target.value);
   });
+
   this.$target.addEventListener("submit", (e) => {
     e.preventDefault();
     this.onSubmit();
   });
 }
+
