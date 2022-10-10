@@ -1,50 +1,68 @@
-export default function Nodes({ $app, initialState, onClick, prevOnClick }) {
-  this.state = initialState;
+export default function Nodes({ $app, onClick, onBackClick }) {
+  this.onBackClick = onBackClick;
+  this.onClick = onClick;
   this.$target = document.createElement("div");
   this.$target.className = "Nodes";
-  this.onClick = onClick;
-  this.prevOnClick = prevOnClick;
   $app.appendChild(this.$target);
 
-  this.render = () => {
-    // console.log(JSON.stringify(this.state, null, 2));
-    this.$target.innerHTML = `${
-      !this.state.isRoot
-        ? `<div class="Node prev">
-						<img src="./assets/prev.png">
-					</div>`
-        : ""
-    }
-		${this.state.nodes
-      .map(
-        (node) => `<div class="Node" data-node-id=${node.id}>
-				<img src="./assets/${node.type === "DIRECTORY" ? "directory" : "file"}.png" />
-				<div class="name">${node.name}</div>
-				</div>`
-      )
-      .join("")}		
-	`;
-  };
-
   this.setState = (newState) => {
-    this.state = newState;
+    this.state = newState; // !: 전역이 아니어도 돼??
     this.render();
   };
 
-  this.render();
+  this.render = () => {
+    if (this.state.nodes) {
+      const nodesTemplate = this.state.nodes
+        .map((node) => {
+          const iconPath =
+            node.type === "FILE"
+              ? "./assets/file.png"
+              : "./assets/directory.png";
 
-  window.addEventListener("click", async (e) => {
-    const $div = e.target.closest(".Node");
-    if (e.target.closest(".Node")) {
-      const nodeId = $div.dataset.nodeId;
-      if (nodeId) {
-        const selectedNode = this.state.nodes.find(
-          (node) => node.id === nodeId
-        );
+          return `
+					<div class="Node" data-node-id="${node.id}">
+						<img src="${iconPath}"/>
+						<div> ${node.name}</div>
+					</div>`;
+        })
+        .join("");
+
+      this.$target.innerHTML = !this.state.isRoot
+        ? `<div class="Node"><img src="/assets/prev.png"></div>${nodesTemplate}`
+        : nodesTemplate;
+    }
+  };
+
+  this.$target.addEventListener("click", (e) => {
+    const $node = e.target.closest(".Node");
+
+    if ($node) {
+      const { nodeId } = $node.dataset;
+      if (!nodeId) {
+        this.onBackClick();
+        return;
+      }
+
+      const selectedNode = this.state.nodes.find((node) => node.id === nodeId);
+      if (selectedNode) {
         this.onClick(selectedNode);
-      } else {
-        this.prevOnClick(nodeId);
       }
     }
   });
 }
+
+// 이벤트 위임 하기 전
+//   this.$target.querySelectorAll(".Node").forEach(($node) => {
+//     $node.addEventListener("click", (e) => {
+//       const { nodeId } = e.target.dataset;
+//       if (!nodeId) {
+//         this.onBackClick();
+//       }
+//       const selectedNode = this.state.find((node) => node.id === nodeId);
+
+//       if (selectedNode) {
+//         this.onClick(selectedNode);
+//       }
+//     });
+//   });
+// };

@@ -1,77 +1,81 @@
-import Nodes from "./Nodes.js";
-import Breadcrumb from "./Breadcrumb.js";
 import { request } from "../api.js";
+import Breadcrumb from "./Breadcrumb.js";
 import Loading from "./Loading.js";
-import ImageViewer from "./ImageViewer.js";
+import Nodes from "./Nodes.js";
+import ImageView from "./ImageView.js";
 
 const cache = {};
 
 export default function App({ $app }) {
   this.state = {
-    path: [],
+    isRoot: false,
     nodes: [],
+    depth: [],
+    selectedFilePath: null,
     isLoading: false,
-    isRoot: true,
-    imageViewerPath: null,
   };
 
-  const loading = new Loading({ $app });
+  const loading = new Loading({ $app, initialState: this.state.isLoading });
 
   const breadcrumb = new Breadcrumb({
     $app,
-    initialState: this.state.path,
-    onClick: async (id) => {
-      try {
-        if (!id) {
-          this.setState({
-            ...this.state,
-            path: [],
-            nodes: cache["root"],
-            isRoot: true,
-            imageViewerPath: "",
-          });
-          return;
-        } else {
-          const idx = this.state.path.findIndex((el) => el.id === id);
-          const nextPath = [...this.state.path].slice(0, idx + 1);
-          this.setState({
-            ...this.state,
-            path: [...nextPath],
-            nodes: cache[id],
-            imageViewerPath: "",
-          });
-        }
-      } catch (e) {
-        console.log(`에러가 발생했습니다. ${e}`);
+    initialState: this.state.depth,
+    onClick: (index) => {
+      if (index === null) {
+        this.setState({
+          ...this.state,
+          depth: [],
+          nodes: cache.root,
+        });
+        return;
       }
+      if (index === this.state.depth.lenght - 1) {
+        return;
+      }
+      const nextState = { ...this.state };
+      const nextDepth = this.state.depth.slice(0, index + 1);
+      this.setState({
+        ...nextState,
+        depth: nextDepth,
+        nodes: cache[nextDepth[nextDepth.length - 1].id],
+      });
     },
   });
+
+  const imageView = new ImageView({
+    $app,
+    initialState: this.state.selectedFilePath,
+  });
+
   const nodes = new Nodes({
     $app,
-    initialState: this.state,
+    initialState: [],
     onClick: async (node) => {
       try {
-        const nodeId = !node.id ? "root" : node.id;
         if (node.type === "DIRECTORY") {
-          loading.setState(true);
-          let nextNodes = cache[node.id];
-          if (!nextNodes) {
-            nextNodes = await request(nodeId);
-            cache[nodeId] = nextNodes;
+          if (cache[node.id]) {
+            this.setState({
+              ...this.state,
+              depth: [...this.state.depth, node],
+              nodes: cache[node.id],
+              isRoot: false,
+            });
+          } else {
+            loading.setState(true);
+            const nextNodes = await request(`/${node.id}`);
+            this.setState({
+              ...this.state,
+              depth: [...this.state.depth, node],
+              nodes: nextNodes,
+              isRoot: false,
+            });
+            loading.setState(false);
+            cache[node.id] = nextNodes;
           }
-          const isRoot = nextNodes.some((el) => !el.parent);
-          loading.setState(false);
+        } else if (node.type === "FILE") {
           this.setState({
             ...this.state,
-            path: [...this.state.path, { id: node.id, name: node.name }],
-            nodes: nextNodes,
-            isRoot,
-            imageViewerPath: "",
-          });
-        } else {
-          this.setState({
-            ...this.state,
-            imageViewerPath: node.filePath,
+            selectedFilePath: node.filePath,
             isRoot: false,
           });
         }
@@ -79,36 +83,56 @@ export default function App({ $app }) {
         console.log(e.message);
       }
     },
-
-    prevOnClick: async () => {
+    onBackClick: async () => {
       try {
-        const newPath = [...this.state.path];
-        newPath.pop();
-        const nextNodeId =
-          newPath.length === 0 ? "root" : newPath[newPath.length - 1].id;
-        const nextNodes = cache[nextNodeId];
-        const isRoot = nextNodes.some((el) => !el.parent);
-        this.setState({
-          ...this.state,
-          path: [...newPath],
-          nodes: nextNodes,
-          isRoot,
-          imageViewerPath: "",
-        });
+        const newState = { ...this.state };
+        newState.depth.pop();
+
+        const prevNodeId =
+          newState.depth.length === 0
+            ? null
+            : newState.depth[newState.depth.length - 1].id;
+        if (prevNodeId === null) {
+          this.setState({
+            ...newState,
+            isRoot: true,
+            nodes: cache.root,
+            selectedFilePath: null,
+          });
+        } else {
+          const prevNodes = await request(prevNodeId);
+          this.setState({
+            ...newState,
+            isRoot: false,
+            nodes: cache[prevNodes],
+            selectedFilePath: null,
+          });
+        }
       } catch (e) {
         console.log(e.message);
       }
     },
   });
-  const imageViewer = new ImageViewer({
-    $app,
-    initialState: this.state.imageViewerPath,
-  });
 
-  this.init = async () => {
-    this.setState({ ...this.state, isLoading: true });
+  this.setState = (nextState) => {
+    console.log(nextState);
+    this.state = nextState;
+    breadcrumb.setState(this.state.depth);
+    nodes.setState({
+      isRoot: this.state.isRoot,
+      nodes: this.state.nodes,
+    });
+    imageView.setState(this.state.selectedFilePath);
+    loading.setState(this.state.isLoading);
+  };
+
+  const init = async () => {
+    this.setState({
+      ...this.state,
+      isLoading: true,
+    });
     try {
-      const rootNodes = await request();
+      const rootNodes = await request("");
       this.setState({
         ...this.state,
         isLoading: false,
@@ -126,13 +150,5 @@ export default function App({ $app }) {
     }
   };
 
-  this.setState = (newState) => {
-    this.state = newState;
-    breadcrumb.setState(this.state.path);
-    nodes.setState(this.state);
-    loading.setState(this.state.isLoading);
-    imageViewer.setState(this.state.imageViewerPath);
-  };
-
-  this.init();
+  init();
 }

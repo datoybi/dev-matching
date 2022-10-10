@@ -6,6 +6,8 @@ export default function ImageView({ $app, initialState }) {
   this.$target = document.createElement("div");
   this.$target.className = "Modal ImageViewer";
 
+  console.log(this.state);
+
   $app.appendChild(this.$target);
 
   this.setState = (newState) => {

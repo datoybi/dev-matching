@@ -1,5 +1,3 @@
 import App from "./components/App.js";
 
-new App({
-  $app: document.querySelector(".App"),
-});
+new App({ $app: document.querySelector(".app") });

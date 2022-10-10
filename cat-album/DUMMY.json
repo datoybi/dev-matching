@@ -1,0 +1,173 @@
+{
+  "dev": [
+    {
+      "id": "1",
+      "name": "노란고양이",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": null
+    },
+    {
+      "id": "3",
+      "name": "까만고양이",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": null
+    },
+    {
+      "id": "10",
+      "name": "고등어무늬 고양이",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": null
+    },
+    {
+      "id": "18",
+      "name": "회색친구",
+      "type": "FILE",
+      "filePath": "/images/U5nc2yre6.jpg",
+      "parent": {
+        "id": "14"
+      }
+    },
+    {
+      "id": "13",
+      "name": "삼색이 고양이",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": null
+    },
+    {
+      "id": "11",
+      "name": "고등어친구1",
+      "type": "FILE",
+      "filePath": "/images/2b0.jpg",
+      "parent": {
+        "id": "10"
+      }
+    },
+    {
+      "id": "12",
+      "name": "고등어친구2",
+      "type": "FILE",
+      "filePath": "/images/_rWrxmDVv.png",
+      "parent": {
+        "id": "10"
+      }
+    },
+    {
+      "id": "14",
+      "name": "회색고양이",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": null
+    },
+    {
+      "id": "20",
+      "name": "하얀고양이",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": null
+    },
+
+    {
+      "id": "5",
+      "name": "2021/04",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": {
+        "id": "1"
+      }
+    },
+    {
+      "id": "19",
+      "name": "물 마시는 사진",
+      "type": "FILE",
+      "filePath": "/images/a2i.jpg",
+      "parent": {
+        "id": "1"
+      }
+    },
+    {
+      "id": "8",
+      "name": "1",
+      "type": "FILE",
+      "filePath": "/images/1.jpg",
+      "parent": {
+        "id": "2"
+      }
+    },
+    {
+      "id": "9",
+      "name": "2",
+      "type": "FILE",
+      "filePath": "/images/2.jpg",
+      "parent": {
+        "id": "2"
+      }
+    },
+    {
+      "id": "6",
+      "name": "2021/04",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": {
+        "id": "3"
+      }
+    },
+    {
+      "id": "21",
+      "name": "세숫대야",
+      "type": "FILE",
+      "filePath": "/images/1mt.jpg",
+      "parent": {
+        "id": "4"
+      }
+    },
+    {
+      "id": "2",
+      "name": "2021/04/12",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": {
+        "id": "5"
+      }
+    },
+    {
+      "id": "4",
+      "name": "2021/04/13",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": {
+        "id": "6"
+      }
+    },
+    {
+      "id": "7",
+      "name": "2021/04/01",
+      "type": "DIRECTORY",
+      "filePath": null,
+      "parent": {
+        "id": "6"
+      }
+    },
+    {
+      "id": "22",
+      "name": "흰둥이",
+      "type": "FILE",
+      "filePath": "/images/v0-TjU-1H.jpg",
+      "parent": {
+        "id": "20"
+      }
+    },
+    {
+      "id": "21",
+      "name": "세숫대야",
+      "type": "FILE",
+      "filePath": "/images/1mt.jpg",
+      "parent": {
+        "id": "4"
+      }
+    }
+  ]
+}
