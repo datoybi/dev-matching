@@ -72,22 +72,3 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
 }
-
-.hide {
-  display: none;
-}
-
-/* .loading {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.4);
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading img {
-  width: auto;
-  height: auto;
-} */
