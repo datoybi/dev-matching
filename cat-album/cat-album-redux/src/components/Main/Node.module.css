@@ -1,0 +1,10 @@
+.Node {
+  width: 140px;
+  min-height: 150px;
+  padding: 12px;
+  margin: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  word-break: keep-all;
+}

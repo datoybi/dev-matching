@@ -1,0 +1,20 @@
+.Breadcrumb {
+  height: 62px;
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  flex-direction: row;
+}
+
+.Breadcrumb > div {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.Breadcrumb > div::after {
+  content: " -";
+}
+
+.Breadcrumb > div:last-child::after {
+  content: "";
+}
