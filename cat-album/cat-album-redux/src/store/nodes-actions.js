@@ -9,7 +9,7 @@ export const fetchNodesData = (url) => {
       const response = await fetch(`${API_END_POINT}${url}`);
 
       if (!response.ok) {
-        throw new Error("Could not fetch cart data!");
+        throw new Error("Could not fetch cat album data!");
       }
 
       const data = await response.json();
