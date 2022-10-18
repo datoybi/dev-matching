@@ -1,0 +1,23 @@
+
+.SelectedLanguage {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  flex-wrap: nowrap;
+  width: 800px;
+  height: 37.5px;
+  margin-top: -100px;
+  margin-bottom: 10px;
+
+}
+
+.SelectedLanguage li {
+  display: inline-block;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 100px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}

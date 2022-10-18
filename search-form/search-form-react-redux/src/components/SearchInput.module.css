@@ -1,0 +1,12 @@
+
+.SearchInput {
+  width: 300px;
+}
+
+.SearchInput__input {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 24px;
+  padding: 10px 24px;
+  font-size: 20px
+}
