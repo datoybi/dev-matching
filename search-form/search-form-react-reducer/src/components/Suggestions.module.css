@@ -1,0 +1,32 @@
+.Suggestion {
+  position: absolute;
+  font-size: 20px;
+  width: 300px;
+  top: 50%;
+  z-index: 1;
+  padding: 10px;
+  border-radius: 24px;
+  border: 1px solid black;
+}
+
+.Suggestion ul {
+  width: 100%;
+}
+
+.Suggestion li {
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.Suggestion li:hover {
+  background-color: #90cdf4;
+}
+
+.Suggestion__item--selected {
+  background-color: #bee3f8;
+}
+
+.Suggestion__item--matched {
+  background-color: #9ae6b4;
+}
