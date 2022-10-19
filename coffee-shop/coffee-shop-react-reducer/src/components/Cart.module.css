@@ -1,0 +1,47 @@
+.Cart {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+
+.Cart__item {
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+}
+
+.Cart ul img {
+  width: 100px;
+  margin-right: 16px;
+}
+
+.Cart__itemDesription {
+  width: 100%;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.Cart__totalPrice {
+  font-size: 24px;
+  text-align: right;
+  padding-right: 16px;
+  margin-bottom: 16px;
+}
+
+.OrderButton {
+  width: 100%;
+  border-radius: 8px;
+  background-color: #1890ff;
+  color: #fff;
+  font-size: 1.2rem;
+  border: 1px solid #40a9ff;
+  padding: 10px;
+}
+
+.OrderButton:hover {
+  cursor: pointer;
+  background-color: #0050b3;
+}

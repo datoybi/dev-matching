@@ -80,7 +80,7 @@
 
 ### 상품 목록 조회
 
-- GET - https://uikt6pohhh.execute-api.ap-northeast-2.amazonaws.com/dev/products
+- GET - https://h6uc5l8b1g.execute-api.ap-northeast-2.amazonaws.com/dev/products
   - 상품 목록을 조회합니다.
   - 응답은 아래와 같습니다.
 

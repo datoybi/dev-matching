@@ -1,0 +1,28 @@
+html,
+body,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #eee;
+  height: 100vh;
+}
+
+.ProductListPage ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.CartPage {
+  width: 600px;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
