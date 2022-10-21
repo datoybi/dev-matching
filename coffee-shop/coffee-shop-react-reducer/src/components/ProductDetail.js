@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import SelectedOptions from "./SelectedOptions";
 import classes from "./ProductDetail.module.css";
@@ -6,29 +6,54 @@ import ProductContext from "../store/product-context";
 
 const ProductDetail = () => {
   const { selectedProduct } = useContext(ProductContext);
-  console.log(selectedProduct);
+  const [selectedElement, setSelectedElement] = useState([]);
+  // onChnage있을때 qunatity 바꾸기
+
+  const onChangeHanlder = (event) => {
+    // quantity 갯수 1로 해서 보내기
+    const selectedOptionId = event.target.value;
+    let selected = selectedProduct.productOptions.find(
+      (option) => option.id === +selectedOptionId
+    );
+    selected = {
+      ...selected,
+      quantity: 1,
+      originalPrice: selectedProduct.price,
+    };
+    setSelectedElement((prevState) => [...prevState, selected]);
+  };
+
+  const onQuantityHanlder = () => {};
 
   return (
     <div className={classes.ProductDetail}>
       <img src={selectedProduct.imageUrl} alt={selectedProduct.name} />
       <div className={classes.ProductDetail__info}>
         <h2>{selectedProduct.name}</h2>
-        <div className={classes.ProductDetail__price}>10,000원~</div>
-        <select>
+        <div className={classes.ProductDetail__price}>
+          {selectedProduct.price.toLocaleString("ko-KR")}원~
+        </div>
+        <select onChange={onChangeHanlder}>
           <option>선택하세요.</option>
-          {/* {selectedProduct.productOptions.map((option) => (
-            <option key={option.id}>{option.name}</option>
-          ))} */}
-          <option>100개 번들</option>
-          <option>1000개 번들(+5,000)</option>
+          {selectedProduct.productOptions.map((option) => (
+            <option
+              value={option.id}
+              key={option.id}
+              disabled={option.stock === 0}
+            >
+              {option.stock === 0 && "(품절) "}
+              {selectedProduct.name} {option.name}
+              {option.price > 0
+                ? `(+${option.price.toLocaleString("ko-KR")}원)`
+                : ""}
+            </option>
+          ))}
         </select>
         <div className={classes.ProductDetail__selectedOptions}>
-          <h3>선택된 상품</h3>
-          <SelectedOptions />
-          <div className={classes.ProductDetail__totalPrice}>
-            {selectedProduct.price.toLocaleString("ko-KR")}원
-          </div>
-          <button className={classes.OrderButton}>주문하기</button>
+          <SelectedOptions
+            selectedElement={selectedElement}
+            onQuantityHanlde={onQuantityHanlder}
+          />
         </div>
       </div>
     </div>

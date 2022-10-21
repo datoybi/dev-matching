@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import ProductContext from "../store/product-context";
 import classes from "./ProductList.module.css";
@@ -8,15 +8,25 @@ import { fetchData } from "../lib/api";
 
 const ProductList = () => {
   const { productsList } = useContext(ProductContext);
-  const { sendRequest } = useHttp(fetchData);
-  const { navigate } = useNavigate();
+  const { sendRequest, status } = useHttp(fetchData);
+  const [selectedProductId, setSelectedProductId] = useState();
+  const navigate = useNavigate();
 
   const onClickhandler = (event) => {
     const li = event.target.closest("li");
     const productId = li.dataset.id;
     sendRequest(`products/${productId}`, "DETAIL");
-    navigate(`/products/${productId}`);
+    setSelectedProductId(productId);
+    // if (status === "completed") {
+    //   navigate(`/products/${productId}`);
+    // }
   };
+
+  useEffect(() => {
+    if (status === "completed") {
+      navigate(`/products/${selectedProductId}`);
+    }
+  }, [status, navigate, selectedProductId]);
 
   return (
     <ul>
